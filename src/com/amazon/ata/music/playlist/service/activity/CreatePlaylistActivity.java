@@ -15,6 +15,7 @@ import com.google.common.collect.Sets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -32,6 +33,7 @@ public class CreatePlaylistActivity implements RequestHandler<CreatePlaylistRequ
      *
      * @param playlistDao PlaylistDao to access the playlists table.
      */
+    @Inject
     public CreatePlaylistActivity(PlaylistDao playlistDao) {
         this.playlistDao = playlistDao;
     }
@@ -53,9 +55,14 @@ public class CreatePlaylistActivity implements RequestHandler<CreatePlaylistRequ
     public CreatePlaylistResult handleRequest(final CreatePlaylistRequest createPlaylistRequest, Context context) {
         log.info("Received CreatePlaylistRequest {}", createPlaylistRequest);
 
-        if (!MusicPlaylistServiceUtils.isValidString(createPlaylistRequest.getName()) & MusicPlaylistServiceUtils.isValidString(createPlaylistRequest.getCustomerId())) {
-        throw new InvalidAttributeValueException();
-        } else {
+        if (!MusicPlaylistServiceUtils.isValidString(createPlaylistRequest.getName())) {
+            throw new InvalidAttributeValueException("Invalid characters");
+        }
+
+        if (!MusicPlaylistServiceUtils.isValidString(createPlaylistRequest.getCustomerId())) {
+            throw new InvalidAttributeValueException("Invalid characters");
+        }
+
 
             String playlistId = MusicPlaylistServiceUtils.generatePlaylistId();
 
@@ -80,4 +87,3 @@ public class CreatePlaylistActivity implements RequestHandler<CreatePlaylistRequ
 
         }
     }
-}

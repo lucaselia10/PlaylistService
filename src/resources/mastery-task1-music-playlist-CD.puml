@@ -71,6 +71,14 @@ class AlbumTrackNotFoundException {
 - serialVersionUID
 }
 
+class InvalidAttributeChangeException {
+- serialVersionUID
+}
+
+class InvalidAttributeException {
+- serialVersionUID
+}
+
 class InvalidAttributeValueException {
 - serialVersionUID
 }
@@ -100,9 +108,8 @@ GetPlaylistSongsActivity <-- PlaylistDao
 UpdatePlaylistActivity <-- PlaylistDao
 
 
-AlbumTrackNotFoundException <|-- RuntimeException
-InvalidAttributeValueException <|-- RuntimeException
-PlaylistNotFoundException <|-- RuntimeException
+RuntimeException <|-- PlaylistNotFoundException
+RuntimeException <|-- AlbumTrackNotFoundException
 
 
 Playlist --> AlbumTrack
@@ -118,8 +125,11 @@ GetPlaylistSongsActivity *-- PlaylistDao
 
 UpdatePlaylistActivity *-- PlaylistDao
 
-
-
+InvalidAttributeException <|-- InvalidAttributeValueException
+InvalidAttributeException <|-- InvalidAttributeChangeException
+'RuntimeException --|> InvalidAttributeChangeException
+'RuntimeException --|> InvalidAttributeValueException
+RuntimeException <|-- InvalidAttributeException
 
 
 

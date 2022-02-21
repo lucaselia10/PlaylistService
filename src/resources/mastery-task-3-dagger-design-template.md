@@ -34,11 +34,17 @@ Remember that:
 List the class(es) that `App.java` provides that are **not** dependencies of other classes, that is, no other classes
  in the project depend on these classes
 
-* 
+
 
 List the class(es) that `App.java` provides that **are** dependencies of other classes
 
-* 
+* CreatePlaylistActivity
+* GetPlaylistActivity
+* UpdatePlaylistActivity
+* AddSongToPlaylistActivity
+* GetPlaylistSongsActivity
+* PlaylistDoa
+* AlbumTrackDoa
 
 List the class(es) that `App.java` creates that have constructors we must annotate with `@Inject`
 
