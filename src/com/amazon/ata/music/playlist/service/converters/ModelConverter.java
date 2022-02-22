@@ -6,6 +6,7 @@ import com.amazon.ata.music.playlist.service.models.PlaylistModel;
 import com.amazon.ata.music.playlist.service.models.SongModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ModelConverter {
     /**
@@ -30,5 +31,14 @@ public class ModelConverter {
                 .withAlbum(albumTrack.getAlbumName())
                 .withTitle(albumTrack.getSongTitle())
                 .build();
+    }
+
+    public List<SongModel> toSongModelList (List<AlbumTrack> albumTracks) {
+       List<SongModel> albumSongModel = new ArrayList<>();
+
+        for(AlbumTrack track : albumTracks) {
+            albumSongModel.add(new ModelConverter().toSongModel(track));
+        }
+        return albumSongModel;
     }
 }

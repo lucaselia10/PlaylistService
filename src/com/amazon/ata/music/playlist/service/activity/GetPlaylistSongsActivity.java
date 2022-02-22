@@ -4,6 +4,7 @@ import com.amazon.ata.music.playlist.service.converters.ModelConverter;
 import com.amazon.ata.music.playlist.service.dynamodb.models.AlbumTrack;
 import com.amazon.ata.music.playlist.service.dynamodb.models.Playlist;
 import com.amazon.ata.music.playlist.service.exceptions.PlaylistNotFoundException;
+import com.amazon.ata.music.playlist.service.models.SongOrder;
 import com.amazon.ata.music.playlist.service.models.requests.GetPlaylistSongsRequest;
 import com.amazon.ata.music.playlist.service.models.results.GetPlaylistSongsResult;
 import com.amazon.ata.music.playlist.service.models.SongModel;
@@ -15,9 +16,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
+import java.text.CollationElementIterator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Implementation of the GetPlaylistSongsActivity for the MusicPlaylistService's GetPlaylistSongs API.
@@ -60,9 +63,35 @@ public class GetPlaylistSongsActivity implements RequestHandler<GetPlaylistSongs
 
         List<SongModel> albumSongModel = new ArrayList<>();
 
+
+
         for (AlbumTrack track : playlist.getSongList()) {
             albumSongModel.add(new ModelConverter().toSongModel(track));
         }
+        SongOrder songOrder;
+
+        try {
+        songOrder = getPlaylistSongsRequest.getOrder();
+
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Song order not valid");
+        }
+
+        if (songOrder == null) {
+            songOrder = SongOrder.DEFAULT;
+        }
+
+        if (songOrder.equals(SongOrder.SHUFFLED)) {
+            Collections.shuffle(albumSongModel);
+        }
+
+        if (songOrder.equals(SongOrder.REVERSED)) {
+                Collections.reverse(albumSongModel);
+         }
+
+
+
+
 
         return GetPlaylistSongsResult.builder()
                 .withSongList(albumSongModel)

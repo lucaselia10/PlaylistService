@@ -77,7 +77,12 @@ public class AddSongToPlaylistActivity implements RequestHandler<AddSongToPlayli
 
         LinkedList<AlbumTrack> songList = new LinkedList<>(playlist.getSongList());
 
-        songList.addLast(albumTrack);
+        if (addSongToPlaylistRequest.isQueueNext()) {
+            songList.addFirst(albumTrack);
+        } else {
+            songList.addLast(albumTrack);
+        }
+
         Integer count = playlist.getSongCount();
         playlist.setSongCount((count) + 1);
 
